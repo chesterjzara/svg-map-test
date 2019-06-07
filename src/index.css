@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.clicked-country {
+  stroke: green;
+  fill: rgb(226, 238, 175);
+}
