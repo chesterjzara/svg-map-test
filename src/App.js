@@ -43,7 +43,7 @@ class App extends Component {
 		return (
 			<div>
 				<div onClick={this.click}>
-					<ReactSVG src={world} />
+					< ReactSVG src={world} />
 				</div>
 				<h1>Last Country Clicked: {this.state.lastClickedTitle}</h1>
 			</div>
