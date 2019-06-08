@@ -5,6 +5,7 @@ import ReactSVG from 'react-svg'
 import Modal from 'react-modal'
 import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
+import Country from './components/Country'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
 const debugPrint = (...args) => {
@@ -26,9 +27,7 @@ class App extends Component {
 			modalIsOpen: false
 		}
 		this.click = this.click.bind(this)
-		this.openModal = this.openModal.bind(this)
-		this.afterOpenModal = this.afterOpenModal.bind(this)
-		this.closeModal = this.closeModal.bind(this)
+		this.toggleModal = this.toggleModal.bind(this)
 		this.fetchUsers = this.fetchUsers.bind(this)
 		this.setUsers = this.setUsers.bind(this)
 		this.handleSelect = this.handleSelect.bind(this)
@@ -36,22 +35,13 @@ class App extends Component {
 		this.sortUserCountryData = this.sortUserCountryData.bind(this)
 
   	}
-  	openModal() {
+  	toggleModal() {
 		this.setState({
-			modalIsOpen: true
+			modalIsOpen: !this.state.modalIsOpen
 		})
   	}
-  	afterOpenModal() {
 
-  	}
-  	closeModal() {
-		this.setState({
-	  		modalIsOpen: false
-		})
-  	}
-	  
 	click(event) {
-		this.openModal()
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
@@ -71,12 +61,12 @@ class App extends Component {
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
-		
-		this.setState( (prevState) => { 
+
+		this.setState( (prevState) => {
 			if(selectVariable = 'currentUser') {
 				this.fetchUserCountries(selectedValue)
 			}
-			
+
 			return{
 				[selectVariable] : selectedValue
 			}
@@ -89,7 +79,7 @@ class App extends Component {
 			.then(jsonRes => {
 				debugPrint(jsonRes)
 				this.sortUserCountryData(jsonRes)
-				
+
 			})
 	}
 	sortUserCountryData(userCountries) {
@@ -125,9 +115,9 @@ class App extends Component {
 			return {
 				users : jsonRes
 			}
-		})	
+		})
 	}
-	
+
 	componentDidMount() {
 		this.fetchUsers()
 	}
@@ -147,14 +137,19 @@ class App extends Component {
 						})}
 					</select>
 				</div>
+        <button onClick={this.toggleModal}>Open Modal</button>
 				</header>
 				<div onClick={this.click}>
 					<ReactSVG src={world} />
-					<Modal
-						modalIsOpen={this.state.modalIsOpen}
-						closeModal={this.closeModal}
-						currentCountry={this.state.currentCountry}
-						/>
+          {(this.state.modalIsOpen)
+          ?
+          <Country
+              modalIsOpen={this.state.modalIsOpen}
+              toggleModal={this.toggleModal}
+              currentCountry={this.state.currentCountry}
+          />
+          : ''
+        }
 				</div>
 				<h1>Country Clicked: {this.state.currentCountry}</h1>
 			</div>

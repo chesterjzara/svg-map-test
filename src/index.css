@@ -32,3 +32,18 @@ h4 {
   stroke: navy;
   fill: lightblue;
 }
+
+.modal {
+  background-color: white;
+  position: fixed;
+  top: 30%;
+  left: 20%;
+  height: 80%;
+  width: 80%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 101;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
