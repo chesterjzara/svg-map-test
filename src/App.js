@@ -131,22 +131,22 @@ class App extends Component {
 		return (
 	  		<div>
 				<header>
-				<h1>World Map App</h1>
-				<div className="user-select-container">
-					<h4>User</h4>
-					<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
-						<option key='0' value="">Select User</option>
-						{this.state.users.map( (user, index) => {
-							return (
-								<option key={user.user_id} value={user.user_id}> {user.username} </option>
-							)
-						})}
-					</select>
-				</div>
-        <button onClick={this.toggleModal}>Open Modal</button>
+					<h1>World Map App</h1>
+					<div className="user-select-container">
+						<h4>User</h4>
+						<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
+							<option key='0' value="">Select User</option>
+							{this.state.users.map( (user, index) => {
+								return (
+									<option key={user.user_id} value={user.user_id}> {user.username} </option>
+								)
+							})}
+						</select>
+					</div>
+        			<button onClick={this.toggleModal}>Open Modal</button>
 				</header>
 				<div onClick={this.click}>
-          {/* <ReactSVG src={world} /> */}
+          			{/* <ReactSVG src={world} /> */}
 					< Map
 						click={this.click}
 						worldString={worldString}
