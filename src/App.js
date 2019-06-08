@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-// import logo from './logo.svg'
-import world from './world-low.svg'
-import ReactSVG from 'react-svg'
 import Modal from 'react-modal'
 import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
 import Country from './components/Country'
+import Map from './components/Map'
+
+//Old SVG import method
+import world from './world-low.svg'
+// New SVG Import method
+import { SvgLoader, SvgProxy } from 'react-svgmt'
+import worldString from './world-low-test.js'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
 const debugPrint = (...args) => {
@@ -20,8 +24,10 @@ class App extends Component {
 		this.state = {
 			currentUser: '',
 			users: [],
-			currentCountry: '',
-			currentCountryId: '',
+			currentCountry: {
+				title: '',
+				country_code: ''
+			},
 			visitedCountries: [],
 			wishlistCountries: [],
 			modalIsOpen: false
@@ -45,15 +51,12 @@ class App extends Component {
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
-	  		event.target.setAttribute('class', 'clicked-country')
 	  		this.setState((prevState) => {
-				if (prevState.currentCountryId) {
-		  			let lastCountry = document.querySelector('#' + prevState.currentCountryId)
-			  		lastCountry.classList.remove('clicked-country')
-				}
 				return {
-					currentCountry: countryTitle,
-					currentCountryId: countrySvgId
+					currentCountry: {
+						title: countryTitle,
+						country_code : countrySvgId
+					}
 				}
 	  		})
 		}
@@ -61,9 +64,8 @@ class App extends Component {
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
-
-		this.setState( (prevState) => {
-			if(selectVariable = 'currentUser') {
+		this.setState( (prevState) => { 
+			if(selectVariable = 'currentUser' && selectedValue) {
 				this.fetchUserCountries(selectedValue)
 			}
 
@@ -73,12 +75,13 @@ class App extends Component {
 		})
 	}
 	fetchUserCountries(userId) {
-		debugPrint('test',1,2)
+		debugPrint('Fetch country data for:',userId)
 		fetch(baseAPI + `countries/user/${userId}`)
 			.then(data => data.json())
 			.then(jsonRes => {
 				debugPrint(jsonRes)
 				this.sortUserCountryData(jsonRes)
+				console.log('state after?',this.state.visitedCountries)
 
 			})
 	}
@@ -98,6 +101,8 @@ class App extends Component {
 				visitedCountries : userTrips,
 				wishlistCountries : userWishlist
 			}
+		}, () => {
+			
 		})
 	}
 	fetchUsers() {
@@ -140,7 +145,14 @@ class App extends Component {
         <button onClick={this.toggleModal}>Open Modal</button>
 				</header>
 				<div onClick={this.click}>
-					<ReactSVG src={world} />
+          {/* <ReactSVG src={world} /> */}
+					< Map 
+						click={this.click}
+						worldString={worldString} 
+						visitedCountries={this.state.visitedCountries}
+						wishlistCountries={this.state.wishlistCountries}
+						currentCountry={this.state.currentCountry}
+					/>
           {(this.state.modalIsOpen)
           ?
           <Country
@@ -151,7 +163,7 @@ class App extends Component {
           : ''
         }
 				</div>
-				<h1>Country Clicked: {this.state.currentCountry}</h1>
+				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
 			</div>
 		)
   	}
