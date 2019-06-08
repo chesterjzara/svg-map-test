@@ -8,7 +8,9 @@ import CountryList from './components/CountryList'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
 const debugPrint = (...args) => {
-	console.log(...args)
+	if(true) {
+		console.log(...args)
+	}
 }
 
 class App extends Component {
