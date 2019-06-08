@@ -7,7 +7,9 @@ import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
-let debug = true;
+const debugPrint = (...args) => {
+	console.log(...args)
+}
 
 class App extends Component {
 	constructor(props) {
@@ -27,6 +29,9 @@ class App extends Component {
 		this.closeModal = this.closeModal.bind(this)
 		this.fetchUsers = this.fetchUsers.bind(this)
 		this.setUsers = this.setUsers.bind(this)
+		this.handleSelect = this.handleSelect.bind(this)
+		this.fetchUserCountries = this.fetchUserCountries.bind(this)
+		
   	}
   	openModal() {
 		this.setState({
@@ -61,14 +66,21 @@ class App extends Component {
 		}
 	}
 	handleSelect(event, selectVariable) {
-		console.log(event)
-        console.log(event.target.value)
-        let selectedValue = event.target.value
-        this.setState( (prevState) => { 
+		let selectedValue = event.target.value
+		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
+		
+		this.setState( (prevState) => { 
+			if(selectVariable = 'currentUser') {
+				this.fetchUserCountries(selectedValue)
+			}
+			
 			return{
 				[selectVariable] : selectedValue
 			}
 		})
+	}
+	fetchUserCountries() {
+		debugPrint('test',1,2)
 	}
 	fetchUsers() {
 		fetch(baseAPI + '/users')
@@ -102,7 +114,7 @@ class App extends Component {
 						<option key='0' value="">Select User</option>
 						{this.state.users.map( (user, index) => {
 							return (
-								<option key={user.id} value={user.id}> {user.username} </option>
+								<option key={user.user_id} value={user.user_id}> {user.username} </option>
 							)
 						})}
 					</select>
