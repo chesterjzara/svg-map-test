@@ -1,8 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Abril+Fatface|Raleway&display=swap);
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Raleway', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,7 +12,23 @@ code {
     monospace;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  background-color: black;
+  color: white;
+  font-family: 'Abril Fatface', cursive;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+h4 {
+  font-family: 'Raleway', sans-serif;
+}
+
 .clicked-country {
-  stroke: green;
-  fill: rgb(226, 238, 175);
+  stroke: navy;
+  fill: lightblue;
 }
