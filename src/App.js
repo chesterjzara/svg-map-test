@@ -1,76 +1,172 @@
-import React, {Component} from 'react';
-import logo from './logo.svg';
-import world from './world-low.svg';
-import ReactSVG from 'react-svg'
+import React, { Component } from 'react'
+import Modal from 'react-modal'
+import UserForm from './components/UserForm'
+import CountryList from './components/CountryList'
+import Country from './components/Country'
+import Map from './components/Map'
 
-// import './App.css';
+//Old SVG import method
+import world from './world-low.svg'
+// New SVG Import method
+import { SvgLoader, SvgProxy } from 'react-svgmt'
+import worldString from './world-low-test.js'
+
+const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+const debugPrint = (...args) => {
+	if(true) {
+		console.log(...args)
+	}
+}
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			lastClickedTitle : '',
-			lastClickedId : ''
+			currentUser: '',
+			users: [],
+			currentCountry: {
+				title: '',
+				country_code: ''
+			},
+			visitedCountries: [],
+			wishlistCountries: [],
+			modalIsOpen: false
 		}
 		this.click = this.click.bind(this)
-	}
+		this.toggleModal = this.toggleModal.bind(this)
+		this.fetchUsers = this.fetchUsers.bind(this)
+		this.setUsers = this.setUsers.bind(this)
+		this.handleSelect = this.handleSelect.bind(this)
+		this.fetchUserCountries = this.fetchUserCountries.bind(this)
+		this.sortUserCountryData = this.sortUserCountryData.bind(this)
+
+  	}
+  	toggleModal() {
+		this.setState({
+			modalIsOpen: !this.state.modalIsOpen
+		})
+  	}
+
 	click(event) {
-		console.log(event.currentTarget)
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
-		console.log(countrySvgId)
-		
-		console.log(countryTitle)
-		if(countryTitle) {
-			event.target.setAttribute('class', 'clicked-country')
-			this.setState((prevState)=> {
-				if(prevState.lastClickedId) {
-					console.log('#'+prevState.lastClickedId)
-					let lastCountry = document.querySelector('#'+prevState.lastClickedId)
-					console.log(lastCountry)
-					lastCountry.classList.remove('clicked-country')
-				}
-				
+		if (countryTitle) {
+	  		this.setState((prevState) => {
 				return {
-					lastClickedTitle : countryTitle,
-					lastClickedId : countrySvgId
+					currentCountry: {
+						title: countryTitle,
+						country_code : countrySvgId
+					}
 				}
-			})
+	  		})
 		}
-		
 	}
-	render() {
+	handleSelect(event, selectVariable) {
+		let selectedValue = event.target.value
+		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
+		this.setState( (prevState) => { 
+			if(selectVariable = 'currentUser' && selectedValue) {
+				this.fetchUserCountries(selectedValue)
+			}
+
+			return{
+				[selectVariable] : selectedValue
+			}
+		})
+	}
+	fetchUserCountries(userId) {
+		debugPrint('Fetch country data for:',userId)
+		fetch(baseAPI + `countries/user/${userId}`)
+			.then(data => data.json())
+			.then(jsonRes => {
+				debugPrint(jsonRes)
+				this.sortUserCountryData(jsonRes)
+				console.log('state after?',this.state.visitedCountries)
+
+			})
+	}
+	sortUserCountryData(userCountries) {
+		let userTrips = []
+		let userWishlist = []
+		userCountries.forEach( (country) => {
+			if(country.type === 'trip') {
+				userTrips.push(country)
+			}
+			else if(country.type === 'wish') {
+				userWishlist.push(country)
+			}
+		})
+		this.setState( (prevState) => {
+			return {
+				visitedCountries : userTrips,
+				wishlistCountries : userWishlist
+			}
+		}, () => {
+			
+		})
+	}
+	fetchUsers() {
+		fetch(baseAPI + 'users')
+			.then(data => data.json())
+			.then(jsonRes => {
+				debugPrint(jsonRes)
+				this.setUsers(jsonRes)
+			})
+			.catch(err => console.log(err))
+	}
+	setUsers(jsonRes) {
+		console.log('set users')
+		this.setState( (prevState) => {
+			return {
+				users : jsonRes
+			}
+		})
+	}
+
+	componentDidMount() {
+		this.fetchUsers()
+	}
+  	render() {
 		return (
-			<div>
-				<div onClick={this.click}>
-					<ReactSVG src={world} />
+	  		<div>
+				<header>
+				<h1>World Map App</h1>
+				<div className="user-select-container">
+					<h4>User</h4>
+					<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
+						<option key='0' value="">Select User</option>
+						{this.state.users.map( (user, index) => {
+							return (
+								<option key={user.user_id} value={user.user_id}> {user.username} </option>
+							)
+						})}
+					</select>
 				</div>
-				<h1>Last Country Clicked: {this.state.lastClickedTitle}</h1>
+        <button onClick={this.toggleModal}>Open Modal</button>
+				</header>
+				<div onClick={this.click}>
+          {/* <ReactSVG src={world} /> */}
+					< Map 
+						click={this.click}
+						worldString={worldString} 
+						visitedCountries={this.state.visitedCountries}
+						wishlistCountries={this.state.wishlistCountries}
+						currentCountry={this.state.currentCountry}
+					/>
+          {(this.state.modalIsOpen)
+          ?
+          <Country
+              modalIsOpen={this.state.modalIsOpen}
+              toggleModal={this.toggleModal}
+              currentCountry={this.state.currentCountry}
+          />
+          : ''
+        }
+				</div>
+				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
 			</div>
 		)
-	}
-
+  	}
 }
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-export default App;
+export default App

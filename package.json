@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@svgr/cli": "^4.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-modal": "^3.8.1",
     "react-scripts": "3.0.1",
-    "react-svg": "^10.0.6"
+    "react-svg": "^10.0.6",
+    "react-svgmt": "^1.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cjzstart": "PORT=3006 react-scripts start"
   },
   "eslintConfig": {
     "extends": "react-app"
