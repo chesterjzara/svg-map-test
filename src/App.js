@@ -30,7 +30,8 @@ class App extends Component {
 			},
 			visitedCountries: [],
 			wishlistCountries: [],
-			modalIsOpen: false
+			modalIsOpen: false,
+			listView: ''
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
@@ -39,7 +40,11 @@ class App extends Component {
 		this.handleSelect = this.handleSelect.bind(this)
 		this.fetchUserCountries = this.fetchUserCountries.bind(this)
 		this.sortUserCountryData = this.sortUserCountryData.bind(this)
-
+		this.handleChangeListView = this.handleChangeListView.bind(this)
+		this.handleListChange = this.handleListChange.bind(this)
+		this.updateArray = this.updateArray.bind(this)
+		this.removeFromArray = this.removeFromArray.bind(this)
+			
   	}
   	toggleModal() {
 		this.setState({
@@ -66,12 +71,65 @@ class App extends Component {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
 		this.setState( (prevState) => {
-			if(selectVariable = 'currentUser' && selectedValue) {
+			if(selectVariable === 'currentUser' && selectedValue) {
 				this.fetchUserCountries(selectedValue)
 			}
 
-			return{
-				[selectVariable] : selectedValue
+			// return{
+			// 	[selectVariable] : selectedValue
+			// }
+		})
+	}
+	handleChangeListView(event, view) {
+		this.setState( {
+			listView: view
+		})
+	}
+	handleListChange( country, removeIndex, removeArray) {
+		if (removeArray === 'visitedCountries') {
+			country.type = 'wish'
+		} 
+		else if (removeArray === 'wishlistCountries') {
+			country.type = 'trip'
+		}
+
+		//fetch here
+		fetch(baseAPI + `countries/${country.trip_id}`, {
+			body: JSON.stringify(country),
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(updatedCountry => {
+			return updatedCountry.json()
+		})
+		.then(jsonData => {
+			//update React state arrays
+			this.removeFromArray(removeArray, removeIndex)
+			if (removeArray === 'visitedCountries') {
+				this.updateArray(country,'wishlistCountries')
+			} 
+			else if (removeArray === 'wishlistCountries') {
+				this.updateArray(country,'visitedCountries')
+			}
+		})
+	}
+
+	removeFromArray(array, arrayIndex) {
+		this.setState( (prevState) => {
+			prevState[array].splice(arrayIndex, 1)
+			return {
+				[array] : prevState[array]
+			}
+		})
+	}
+	updateArray( country, array) {
+		this.setState( (prevState) => {
+			prevState[array].push(country)
+			return {
+				[array] : prevState[array]
 			}
 		})
 	}
@@ -89,6 +147,7 @@ class App extends Component {
 	sortUserCountryData(userCountries) {
 		let userTrips = []
 		let userWishlist = []
+		let newCurrentUser
 		userCountries.forEach( (country) => {
 			if(country.type === 'trip') {
 				userTrips.push(country)
@@ -96,11 +155,13 @@ class App extends Component {
 			else if(country.type === 'wish') {
 				userWishlist.push(country)
 			}
+			newCurrentUser = country.user_id
 		})
 		this.setState( (prevState) => {
 			return {
 				visitedCountries : userTrips,
-				wishlistCountries : userWishlist
+				wishlistCountries : userWishlist,
+				currentUser : newCurrentUser
 			}
 		}, () => {
 
@@ -129,42 +190,53 @@ class App extends Component {
 	}
   	render() {
 		return (
-	  		<div>
-				<header>
-					<h1>World Map App</h1>
-					<div className="user-select-container">
-						<h4>User</h4>
-						<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
-							<option key='0' value="">Select User</option>
-							{this.state.users.map( (user, index) => {
-								return (
-									<option key={user.user_id} value={user.user_id}> {user.username} </option>
-								)
-							})}
-						</select>
-					</div>
-        			<button onClick={this.toggleModal}>Open Modal</button>
-				</header>
-				<div onClick={this.click}>
-          			{/* <ReactSVG src={world} /> */}
-					< Map
-						click={this.click}
-						worldString={worldString}
-						visitedCountries={this.state.visitedCountries}
-						wishlistCountries={this.state.wishlistCountries}
-						currentCountry={this.state.currentCountry}
-					/>
-          {(this.state.modalIsOpen)
-          ?
-          <Country
+	  	<div>
+			<header>
+				<h1>World Map App</h1>
+				<div className="user-select-container">
+					<h4>User</h4>
+					<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
+						<option key='0' value="">Select User</option>
+						{this.state.users.map( (user, index) => {
+							return (
+								<option key={user.user_id} value={user.user_id}> {user.username} </option>
+							)
+						})}
+					</select>
+				</div>
+				<button onClick={this.toggleModal}>Open Modal</button>
+			</header>
+			<div onClick={this.click}>
+				{/* <ReactSVG src={world} /> */}
+				< Map
+					click={this.click}
+					worldString={worldString}
+					visitedCountries={this.state.visitedCountries}
+					wishlistCountries={this.state.wishlistCountries}
+					currentCountry={this.state.currentCountry}
+				/>
+         	{(this.state.modalIsOpen)
+         	?
+          	<Country
               modalIsOpen={this.state.modalIsOpen}
               toggleModal={this.toggleModal}
               currentCountry={this.state.currentCountry}
-          />
-          : ''
-        }
-				</div>
+          	/>
+          	: ''
+        	}	
+			</div>
+				
+				<button onClick={(event)=> {this.handleChangeListView(event,'trip')}}> Trip</button>
+				<button onClick={(event)=> {this.handleChangeListView(event,'wish')}}> Wish</button>
+				< CountryList 
+					visitedCountries={this.state.visitedCountries} 
+					wishlistCountries={this.state.wishlistCountries}
+					listView={this.state.listView}
+					handleListChange={this.handleListChange}
+				/>
+
 				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
+				
 			</div>
 		)
   	}
