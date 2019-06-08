@@ -60,11 +60,12 @@ class App extends Component {
 				}
 	  		})
 		}
+    // this.toggleModal()
 	}
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
-		this.setState( (prevState) => { 
+		this.setState( (prevState) => {
 			if(selectVariable = 'currentUser' && selectedValue) {
 				this.fetchUserCountries(selectedValue)
 			}
@@ -102,7 +103,7 @@ class App extends Component {
 				wishlistCountries : userWishlist
 			}
 		}, () => {
-			
+
 		})
 	}
 	fetchUsers() {
@@ -146,9 +147,9 @@ class App extends Component {
 				</header>
 				<div onClick={this.click}>
           {/* <ReactSVG src={world} /> */}
-					< Map 
+					< Map
 						click={this.click}
-						worldString={worldString} 
+						worldString={worldString}
 						visitedCountries={this.state.visitedCountries}
 						wishlistCountries={this.state.wishlistCountries}
 						currentCountry={this.state.currentCountry}
