@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
+import Country from './components/Country'
 import Map from './components/Map'
 
 //Old SVG import method
@@ -32,9 +33,7 @@ class App extends Component {
 			modalIsOpen: false
 		}
 		this.click = this.click.bind(this)
-		this.openModal = this.openModal.bind(this)
-		this.afterOpenModal = this.afterOpenModal.bind(this)
-		this.closeModal = this.closeModal.bind(this)
+		this.toggleModal = this.toggleModal.bind(this)
 		this.fetchUsers = this.fetchUsers.bind(this)
 		this.setUsers = this.setUsers.bind(this)
 		this.handleSelect = this.handleSelect.bind(this)
@@ -42,22 +41,13 @@ class App extends Component {
 		this.sortUserCountryData = this.sortUserCountryData.bind(this)
 
   	}
-  	openModal() {
+  	toggleModal() {
 		this.setState({
-			modalIsOpen: true
+			modalIsOpen: !this.state.modalIsOpen
 		})
   	}
-  	afterOpenModal() {
 
-  	}
-  	closeModal() {
-		this.setState({
-	  		modalIsOpen: false
-		})
-  	}
-	  
 	click(event) {
-		this.openModal()
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
@@ -74,12 +64,11 @@ class App extends Component {
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
-		
 		this.setState( (prevState) => { 
 			if(selectVariable = 'currentUser' && selectedValue) {
 				this.fetchUserCountries(selectedValue)
 			}
-			
+
 			return{
 				[selectVariable] : selectedValue
 			}
@@ -93,6 +82,7 @@ class App extends Component {
 				debugPrint(jsonRes)
 				this.sortUserCountryData(jsonRes)
 				console.log('state after?',this.state.visitedCountries)
+
 			})
 	}
 	sortUserCountryData(userCountries) {
@@ -130,9 +120,9 @@ class App extends Component {
 			return {
 				users : jsonRes
 			}
-		})	
+		})
 	}
-	
+
 	componentDidMount() {
 		this.fetchUsers()
 	}
@@ -152,9 +142,10 @@ class App extends Component {
 						})}
 					</select>
 				</div>
+        <button onClick={this.toggleModal}>Open Modal</button>
 				</header>
-				<div >
-					{/* <ReactSVG src={world} /> */}
+				<div onClick={this.click}>
+          {/* <ReactSVG src={world} /> */}
 					< Map 
 						click={this.click}
 						worldString={worldString} 
@@ -162,11 +153,15 @@ class App extends Component {
 						wishlistCountries={this.state.wishlistCountries}
 						currentCountry={this.state.currentCountry}
 					/>
-					<Modal
-						modalIsOpen={this.state.modalIsOpen}
-						closeModal={this.closeModal}
-						currentCountry={this.state.currentCountry}
-						/>
+          {(this.state.modalIsOpen)
+          ?
+          <Country
+              modalIsOpen={this.state.modalIsOpen}
+              toggleModal={this.toggleModal}
+              currentCountry={this.state.currentCountry}
+          />
+          : ''
+        }
 				</div>
 				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
 			</div>
