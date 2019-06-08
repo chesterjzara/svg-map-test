@@ -33,7 +33,8 @@ class App extends Component {
 		this.setUsers = this.setUsers.bind(this)
 		this.handleSelect = this.handleSelect.bind(this)
 		this.fetchUserCountries = this.fetchUserCountries.bind(this)
-		
+		this.sortUserCountryData = this.sortUserCountryData.bind(this)
+
   	}
   	openModal() {
 		this.setState({
@@ -81,14 +82,39 @@ class App extends Component {
 			}
 		})
 	}
-	fetchUserCountries() {
+	fetchUserCountries(userId) {
 		debugPrint('test',1,2)
-	}
-	fetchUsers() {
-		fetch(baseAPI + '/users')
+		fetch(baseAPI + `countries/user/${userId}`)
 			.then(data => data.json())
 			.then(jsonRes => {
-				console.log(jsonRes)
+				debugPrint(jsonRes)
+				this.sortUserCountryData(jsonRes)
+				
+			})
+	}
+	sortUserCountryData(userCountries) {
+		let userTrips = []
+		let userWishlist = []
+		userCountries.forEach( (country) => {
+			if(country.type === 'trip') {
+				userTrips.push(country)
+			}
+			else if(country.type === 'wish') {
+				userWishlist.push(country)
+			}
+		})
+		this.setState( (prevState) => {
+			return {
+				visitedCountries : userTrips,
+				wishlistCountries : userWishlist
+			}
+		})
+	}
+	fetchUsers() {
+		fetch(baseAPI + 'users')
+			.then(data => data.json())
+			.then(jsonRes => {
+				debugPrint(jsonRes)
 				this.setUsers(jsonRes)
 			})
 			.catch(err => console.log(err))
