@@ -13,6 +13,7 @@ import { SvgLoader, SvgProxy } from 'react-svgmt'
 import worldString from './world-low-test.js'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+
 const debugPrint = (...args) => {
 	if(true) {
 		console.log(...args)
@@ -32,10 +33,9 @@ class App extends Component {
 			visitedCountries: [],
 			wishlistCountries: [],
 			modalIsOpen: false,
-      listView: '',
-      welcomeOpen: true,
+			listView: '',
+			welcomeOpen: true,
 			userForm: false,
-
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
@@ -73,7 +73,6 @@ class App extends Component {
 				userForm: !this.state.userForm
 			})
 		}
-
 	click(event) {
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
@@ -344,8 +343,6 @@ class App extends Component {
 					handleListDelete={this.handleListDelete}
 					handleChangeListView={this.handleChangeListView}
 				/>
-
-				<h1>Country Clicked: {this.state.currentCountry.country_title} - {this.state.currentCountry.country_code}</h1>
 				
 		</div>
 		)
