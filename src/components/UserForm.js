@@ -12,7 +12,7 @@ class UserForm extends Component {
   render () {
     return (
       <div className="user-form">
-
+        This is the user form.
       </div>
     )
   }
