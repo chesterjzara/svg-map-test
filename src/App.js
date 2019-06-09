@@ -222,54 +222,63 @@ class App extends Component {
 	}
   	render() {
 		return (
-	  		<div>
-          {(this.state.welcomeOpen) ?
-            <Welcome
-            closeWelcome={this.closeWelcome}
-            welcomeOpen={this.state.welcomeOpen}
-            userForm={this.state.userForm}
-            createUser={this.createUser}/>
-            : '' }
-          {(this.state.userForm) ?
-            <UserForm />
-            : '' }
+	  		<div className="app-content">
+          		{(this.state.welcomeOpen) ?
+					<Welcome
+						closeWelcome={this.closeWelcome}
+						welcomeOpen={this.state.welcomeOpen}
+						userForm={this.state.userForm}
+						createUser={this.createUser}/>
+					: '' }
+          		{(this.state.userForm) ?
+            		<UserForm />
+            		: '' }
 				<header>
-				<h1>World Map App</h1>
-				<div className="user-select-container">
-					<h4>User</h4>
-					<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
-						<option key='0' value="">Select User</option>
-						{this.state.users.map( (user, index) => {
-							return (
-								<option key={user.user_id} value={user.user_id}> {user.username} </option>
-							)
-						})}
-					</select>
+					<h1>World Map App</h1>
+					<div className="user-select-container">
+						<h4>User</h4>
+						<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
+							<option key='0' value="">Select User</option>
+							{this.state.users.map( (user, index) => {
+								return (
+									<option key={user.user_id} value={user.user_id}> {user.username} </option>
+								)
+							})}
+						</select>
+					</div>
+					<button onClick={this.toggleModal}>Open Modal</button>
+					<div className="list-button-container">
+						<button 
+							onClick={(event)=> {this.handleChangeListView(event,'trip')}}
+							className={this.state.listView === 'trip'?'button-selected':''}> 
+							Trip
+						</button>
+						<button 
+							onClick={(event)=> {this.handleChangeListView(event,'wish')}}className={this.state.listView === 'wish'?'button-selected':''}> 
+							Wish</button>
+					</div>
+
+				</header>
+				<div onClick={this.click}>
+					< Map
+						click={this.click}
+						worldString={worldString}
+						visitedCountries={this.state.visitedCountries}
+						wishlistCountries={this.state.wishlistCountries}
+						currentCountry={this.state.currentCountry}
+					/>
+					{(this.state.modalIsOpen)
+						?
+						<Country
+							modalIsOpen={this.state.modalIsOpen}
+							toggleModal={this.toggleModal}
+							currentCountry={this.state.currentCountry}
+						/>
+						: ''
+					}	
 				</div>
-				<button onClick={this.toggleModal}>Open Modal</button>
-			</header>
-			<div onClick={this.click}>
-				{/* <ReactSVG src={world} /> */}
-				< Map
-					click={this.click}
-					worldString={worldString}
-					visitedCountries={this.state.visitedCountries}
-					wishlistCountries={this.state.wishlistCountries}
-					currentCountry={this.state.currentCountry}
-				/>
-         	{(this.state.modalIsOpen)
-         	?
-          	<Country
-              modalIsOpen={this.state.modalIsOpen}
-              toggleModal={this.toggleModal}
-              currentCountry={this.state.currentCountry}
-          	/>
-          	: ''
-        	}	
-			</div>
 				
-				<button onClick={(event)=> {this.handleChangeListView(event,'trip')}}> Trip</button>
-				<button onClick={(event)=> {this.handleChangeListView(event,'wish')}}> Wish</button>
+				
 				< CountryList 
 					visitedCountries={this.state.visitedCountries} 
 					wishlistCountries={this.state.wishlistCountries}
@@ -280,7 +289,7 @@ class App extends Component {
 
 				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
 				
-			</div>
+		</div>
 		)
   	}
 }
