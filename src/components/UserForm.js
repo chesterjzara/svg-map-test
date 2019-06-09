@@ -8,11 +8,28 @@ class UserForm extends Component {
         username: '',
     }
   }
+  handleSubmit(event) {
+    event.preventDefault()
+    this.props.handleCreateUser()
+  }
+  handleChange(event) {
+    this.setState({
+      username: event.target.value
+    })
+  }
 
   render () {
     return (
       <div className="user-form">
-        This is the user form.
+        <form>
+          <input
+            type="text"
+            placeholder="Username..."
+            onChange={this.handleChange}
+            value={this.state.username}
+            />
+          <button type="submit">Create New User!</button>
+        </form>
       </div>
     )
   }
