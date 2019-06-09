@@ -346,7 +346,7 @@ class App extends Component {
 					</div>
 
 				</header>
-				<div onClick={this.click}>
+				<div >
 					< Map
 						click={this.click}
 						worldString={worldString}
