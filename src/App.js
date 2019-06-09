@@ -26,7 +26,7 @@ class App extends Component {
 			currentUser: '',
 			users: [],
 			currentCountry: {
-				title: '',
+				country_title: '',
 				country_code: ''
 			},
 			visitedCountries: [],
@@ -79,13 +79,21 @@ class App extends Component {
 	  		this.setState((prevState) => {
 				return {
 					currentCountry: {
-						title: countryTitle,
+						country_title: countryTitle,
 						country_code : countrySvgId
 					}
 				}
 	  		})
 		}
-    // this.toggleModal()
+    	this.toggleModal()
+	}
+	handleNewCountry(country, addToList) {
+		country.user_id = this.state.currentUser
+		country.trip_type = addToList
+
+
+		console.log(country);
+		fetch(baseAPI + `countries`)
 	}
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
@@ -287,11 +295,11 @@ class App extends Component {
 					handleListDelete={this.handleListDelete}
 				/>
 
-				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>
+				<h1>Country Clicked: {this.state.currentCountry.country_title} - {this.state.currentCountry.country_code}</h1>
 				
 		</div>
 		)
   	}
 }
 
-export default App
+export default App;
