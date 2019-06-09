@@ -33,10 +33,9 @@ class App extends Component {
 			visitedCountries: [],
 			wishlistCountries: [],
 			modalIsOpen: false,
-      listView: '',
-      welcomeOpen: true,
+			listView: '',
+			welcomeOpen: true,
 			userForm: false,
-
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
