@@ -4,6 +4,7 @@ import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
 import Country from './components/Country'
 import Map from './components/Map'
+import Welcome from './components/Welcome'
 
 //Old SVG import method
 import world from './world-low.svg'
@@ -30,7 +31,9 @@ class App extends Component {
 			},
 			visitedCountries: [],
 			wishlistCountries: [],
-			modalIsOpen: false
+			modalIsOpen: false,
+			welcomeOpen: true,
+			userForm: false,
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
@@ -39,6 +42,8 @@ class App extends Component {
 		this.handleSelect = this.handleSelect.bind(this)
 		this.fetchUserCountries = this.fetchUserCountries.bind(this)
 		this.sortUserCountryData = this.sortUserCountryData.bind(this)
+		this.closeWelcome = this.closeWelcome.bind(this)
+		this.createUser = this.createUser.bind(this)
 
   	}
   	toggleModal() {
@@ -46,6 +51,19 @@ class App extends Component {
 			modalIsOpen: !this.state.modalIsOpen
 		})
   	}
+
+		closeWelcome() {
+			this.setState({
+				welcomeOpen: !this.state.welcomeOpen
+			})
+		}
+
+		createUser() {
+			this.setState({
+				welcomeOpen: !this.state.welcomeOpen,
+				userForm: !this.state.userForm
+			})
+		}
 
 	click(event) {
 		let countryTitle = event.target.getAttribute('title')
@@ -130,6 +148,16 @@ class App extends Component {
   	render() {
 		return (
 	  		<div>
+				{(this.state.welcomeOpen) ?
+				<Welcome
+				closeWelcome={this.closeWelcome}
+				welcomeOpen={this.state.welcomeOpen}
+				userForm={this.state.userForm}
+				createUser={this.createUser}/>
+				: '' }
+				{(this.state.userForm) ?
+				<UserForm />
+				: '' }
 				<header>
 				<h1>World Map App</h1>
 				<div className="user-select-container">
