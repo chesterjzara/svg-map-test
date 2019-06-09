@@ -13,6 +13,7 @@ import { SvgLoader, SvgProxy } from 'react-svgmt'
 import worldString from './world-low-test.js'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+
 const debugPrint = (...args) => {
 	if(true) {
 		console.log(...args)
@@ -32,10 +33,9 @@ class App extends Component {
 			visitedCountries: [],
 			wishlistCountries: [],
 			modalIsOpen: false,
-      listView: '',
-      welcomeOpen: true,
+			listView: '',
+			welcomeOpen: true,
 			userForm: false,
-
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
@@ -249,15 +249,14 @@ class App extends Component {
 			.then(data => data.json())
 			.then(jsonRes => {
 				debugPrint(jsonRes)
-				this.sortUserCountryData(jsonRes)
+				this.sortUserCountryData(jsonRes, userId)
 				console.log('state after?',this.state.visitedCountries)
 
 			})
 	}
-	sortUserCountryData(userCountries) {
+	sortUserCountryData(userCountries, userId) {
 		let userTrips = []
 		let userWishlist = []
-		let newCurrentUser
 		userCountries.forEach( (country) => {
 			if(country.type === 'trip') {
 				userTrips.push(country)
@@ -265,13 +264,12 @@ class App extends Component {
 			else if(country.type === 'wish') {
 				userWishlist.push(country)
 			}
-			newCurrentUser = country.user_id
 		})
 		this.setState( (prevState) => {
 			return {
 				visitedCountries : userTrips,
 				wishlistCountries : userWishlist,
-				currentUser : newCurrentUser
+				currentUser : userId
 			}
 		}, () => {
 
@@ -323,7 +321,10 @@ class App extends Component {
 					<h1>World Map App</h1>
 					<div className="user-select-container">
 						<h4>User</h4>
-						<select onChange={(event) => this.handleSelect(event, 'currentUser')} className="user-select">
+						<select 
+							onChange={(event) => this.handleSelect(event, 'currentUser')} 
+							className="user-select"
+							value={this.state.currentUser} >
 							<option key='0' value="">Select User</option>
 							{this.state.users.map( (user, index) => {
 								return (
@@ -376,9 +377,6 @@ class App extends Component {
 					handleListDelete={this.handleListDelete}
 					handleChangeListView={this.handleChangeListView}
 				/>
-
-				<h1>Country Clicked: {this.state.currentCountry.country_title} - {this.state.currentCountry.country_code}</h1>
-
 		</div>
 		)
   	}
