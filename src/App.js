@@ -44,8 +44,9 @@ class App extends Component {
 		this.handleListChange = this.handleListChange.bind(this)
 		this.updateArray = this.updateArray.bind(this)
 		this.removeFromArray = this.removeFromArray.bind(this)
+		this.handleListDelete = this.handleListDelete.bind(this)
 			
-  	}
+		}
   	toggleModal() {
 		this.setState({
 			modalIsOpen: !this.state.modalIsOpen
@@ -116,7 +117,19 @@ class App extends Component {
 			}
 		})
 	}
+	handleListDelete(country, removeIndex, removeArray) {
+		fetch(baseAPI + `countries/${country.trip_id}`, {
+			method: 'DELETE'
+		})
+		.then(deletedCountry => {
+			return deletedCountry.json()
+		})
+		.then(jsonData => {
+			this.removeFromArray(removeArray, removeIndex)
+		})
+		.catch( err => console.log(err))
 
+	}
 	removeFromArray(array, arrayIndex) {
 		this.setState( (prevState) => {
 			prevState[array].splice(arrayIndex, 1)
@@ -233,6 +246,7 @@ class App extends Component {
 					wishlistCountries={this.state.wishlistCountries}
 					listView={this.state.listView}
 					handleListChange={this.handleListChange}
+					handleListDelete={this.handleListDelete}
 				/>
 
 				<h1>Country Clicked: {this.state.currentCountry.title} - {this.state.currentCountry.country_code}</h1>

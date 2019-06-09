@@ -14,6 +14,7 @@ class CountryList extends Component {
 									index={index}
 									currArray='visitedCountries'
 									handleListChange={this.props.handleListChange}
+									handleListDelete={this.props.handleListDelete}
 									// Method for delete
 									country={country}
 								/>
@@ -30,7 +31,7 @@ class CountryList extends Component {
 									index={index}
 									currArray='wishlistCountries'
 									handleListChange={this.props.handleListChange}
-									// Method for delete
+									handleListDelete={this.props.handleListDelete}
 									country={country}
 								/>
 							)
