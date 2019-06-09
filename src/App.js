@@ -54,6 +54,7 @@ class App extends Component {
 		this.createUser = this.createUser.bind(this)
 		this.handleNewCountry = this.handleNewCountry.bind(this)
 		this.handleCountryInList = this.handleCountryInList.bind(this)
+		this.handleCreateUser = this.handleCreateUser.bind(this)
   	}
 
   	toggleModal() {
@@ -93,7 +94,11 @@ class App extends Component {
 		})
 			.then(createdUser => createdUser.json())
 			.then(userJson => {
-				this.users.push(userJson)
+				console.log(userJson);
+				this.fetchUsers()
+				this.setState({
+					currentUser: userJson.user_id
+				})
 			})
 			.catch(err => console.log(err))
 	}
@@ -321,8 +326,8 @@ class App extends Component {
 					<h1>World Map App</h1>
 					<div className="user-select-container">
 						<h4>User</h4>
-						<select 
-							onChange={(event) => this.handleSelect(event, 'currentUser')} 
+						<select
+							onChange={(event) => this.handleSelect(event, 'currentUser')}
 							className="user-select"
 							value={this.state.currentUser} >
 							<option key='0' value="">Select User</option>

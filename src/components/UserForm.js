@@ -13,7 +13,6 @@ class UserForm extends Component {
   handleSubmit(event) {
     event.preventDefault()
     this.props.handleCreateUser(this.state)
-    this.props.fetchUsers()
     this.props.mainPage()
   }
   handleChange(event) {
