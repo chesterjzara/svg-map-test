@@ -52,6 +52,7 @@ class App extends Component {
 		this.closeWelcome = this.closeWelcome.bind(this)
 		this.createUser = this.createUser.bind(this)
 		this.handleNewCountry = this.handleNewCountry.bind(this)
+		this.handleCountryInList = this.handleCountryInList.bind(this)
   	}
     
   	toggleModal() {
@@ -87,21 +88,31 @@ class App extends Component {
 				}
 	  		})
 		}
-    	
+	}
+	handleCountryInList(country, listToCheck) {
+		let countryCode = country.country_code
+		let inList = false;
+
+		this.state[listToCheck].forEach( (checkCountry) => {
+			if(checkCountry.country_code === countryCode) {
+				inList = true;
+			}
+		})
+
+		return inList
 	}
 	handleNewCountry(country, addToList) {
 		country.user_id = this.state.currentUser
 		country.type = addToList
 		country.trip_date = '2019-06-08'
 		let arrayToUpdate;
+		
 		if(addToList === 'trip') {
 			arrayToUpdate = 'visitedCountries'
 		}
 		else if(addToList === 'wish') {
 			arrayToUpdate = 'wishlistCountries'
 		}
-
-		console.log(country);
 
 		if(this.state.currentUser) {
 			fetch(baseAPI + `countries`, {
@@ -132,10 +143,6 @@ class App extends Component {
 			if(selectVariable === 'currentUser' && selectedValue) {
 				this.fetchUserCountries(selectedValue)
 			}
-
-			// return{
-			// 	[selectVariable] : selectedValue
-			// }
 		})
 	}
 	handleChangeListView(view) {
@@ -150,8 +157,6 @@ class App extends Component {
 					listView: view
 				}
 			}
-
-			
 		})
 	}
 	handleListChange( country, removeIndex, removeArray) {
@@ -323,6 +328,8 @@ class App extends Component {
 							toggleModal={this.toggleModal}
 							currentCountry={this.state.currentCountry}
 							handleNewCountry={this.handleNewCountry}
+							currentUser={this.state.currentUser}
+							handleCountryInList={this.handleCountryInList}
 						/>
 						: ''
 					}	
