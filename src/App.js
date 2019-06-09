@@ -50,11 +50,12 @@ class App extends Component {
 		this.removeFromArray = this.removeFromArray.bind(this)
 		this.handleListDelete = this.handleListDelete.bind(this)
 		this.closeWelcome = this.closeWelcome.bind(this)
+		this.mainPage = this.mainPage.bind(this)
 		this.createUser = this.createUser.bind(this)
 		this.handleNewCountry = this.handleNewCountry.bind(this)
 		this.handleCountryInList = this.handleCountryInList.bind(this)
   	}
-    
+
   	toggleModal() {
       this.setState({
         modalIsOpen: !this.state.modalIsOpen
@@ -73,11 +74,35 @@ class App extends Component {
 				userForm: !this.state.userForm
 			})
 		}
+
+		mainPage() {
+			this.setState({
+				welcomeOpen: false,
+				userForm: false
+			})
+		}
+
+	handleCreateUser(user) {
+		fetch(baseAPI + `users`, {
+			body: JSON.stringify(user),
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(createdUser => createdUser.json())
+			.then(userJson => {
+				this.users.push(userJson)
+			})
+			.catch(err => console.log(err))
+	}
+
 	click(event) {
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
-			this.toggleModal()  
+			this.toggleModal()
 			this.setState((prevState) => {
 				return {
 					currentCountry: {
@@ -105,7 +130,7 @@ class App extends Component {
 		country.type = addToList
 		country.trip_date = '2019-06-08'
 		let arrayToUpdate;
-		
+
 		if(addToList === 'trip') {
 			arrayToUpdate = 'visitedCountries'
 		}
@@ -161,7 +186,7 @@ class App extends Component {
 	handleListChange( country, removeIndex, removeArray) {
 		if (removeArray === 'visitedCountries') {
 			country.type = 'wish'
-		} 
+		}
 		else if (removeArray === 'wishlistCountries') {
 			country.type = 'trip'
 		}
@@ -183,7 +208,7 @@ class App extends Component {
 			this.removeFromArray(removeArray, removeIndex)
 			if (removeArray === 'visitedCountries') {
 				this.updateArray(country,'wishlistCountries')
-			} 
+			}
 			else if (removeArray === 'wishlistCountries') {
 				this.updateArray(country,'visitedCountries')
 			}
@@ -282,7 +307,15 @@ class App extends Component {
 						createUser={this.createUser}/>
 					: '' }
           		{(this.state.userForm) ?
-            		<UserForm />
+            		<UserForm
+									handleCreateUser={this.handleCreateUser}
+									mainPage={this.mainPage}
+									welcomeOpen={this.state.welcomeOpen}
+									userForm={this.state.userForm}
+									users={this.state.users}
+									currentUser={this.state.currentUser}
+									fetchUsers={this.fetchUsers}
+									/>
             		: '' }
 				<header>
 					<h1>World Map App</h1>
@@ -302,13 +335,13 @@ class App extends Component {
 					</div>
 					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
 					<div className="list-button-container">
-						<button 
+						<button
 							onClick={()=> {this.handleChangeListView('trip')}}
-							className={this.state.listView === 'trip'?'button-selected':''}> 
+							className={this.state.listView === 'trip'?'button-selected':''}>
 							Trip
 						</button>
-						<button 
-							onClick={()=> {this.handleChangeListView('wish')}}className={this.state.listView === 'wish'?'button-selected':''}> 
+						<button
+							onClick={()=> {this.handleChangeListView('wish')}}className={this.state.listView === 'wish'?'button-selected':''}>
 							Wish</button>
 					</div>
 
@@ -332,19 +365,18 @@ class App extends Component {
 							handleCountryInList={this.handleCountryInList}
 						/>
 						: ''
-					}	
+					}
 				</div>
-				
-				
-				< CountryList 
-					visitedCountries={this.state.visitedCountries} 
+
+
+				< CountryList
+					visitedCountries={this.state.visitedCountries}
 					wishlistCountries={this.state.wishlistCountries}
 					listView={this.state.listView}
 					handleListChange={this.handleListChange}
 					handleListDelete={this.handleListDelete}
 					handleChangeListView={this.handleChangeListView}
 				/>
-				
 		</div>
 		)
   	}
