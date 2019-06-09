@@ -10,8 +10,16 @@ class Country extends Component {
             <img src={`https://www.countryflags.io/${this.props.currentCountry.country_code}/shiny/64.png`} />
             <br />
           <button onClick={this.props.toggleModal}>Close Modal</button>
-          <button>Add to Trips</button>
-          <button>Add to Wishlist</button>
+          
+          <button 
+            onClick={()=> this.props.handleNewCountry(this.props.currentCountry, 'trip')}>
+              Add to Trips
+          </button>
+
+          <button
+            onClick={()=> this.props.handleNewCountry(this.props.currentCountry, 'wish')}>
+              Add to Wishlist
+          </button>
         </div>
         </React.Fragment>
     )

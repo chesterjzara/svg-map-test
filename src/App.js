@@ -51,6 +51,7 @@ class App extends Component {
 		this.handleListDelete = this.handleListDelete.bind(this)
 		this.closeWelcome = this.closeWelcome.bind(this)
 		this.createUser = this.createUser.bind(this)
+		this.handleNewCountry = this.handleNewCountry.bind(this)
   	}
     
   	toggleModal() {
@@ -76,7 +77,8 @@ class App extends Component {
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
-	  		this.setState((prevState) => {
+			this.toggleModal()  
+			this.setState((prevState) => {
 				return {
 					currentCountry: {
 						country_title: countryTitle,
@@ -85,15 +87,43 @@ class App extends Component {
 				}
 	  		})
 		}
-    	this.toggleModal()
+    	
 	}
 	handleNewCountry(country, addToList) {
 		country.user_id = this.state.currentUser
-		country.trip_type = addToList
-
+		country.type = addToList
+		country.trip_date = '2019-06-08'
+		let arrayToUpdate;
+		if(addToList === 'trip') {
+			arrayToUpdate = 'visitedCountries'
+		}
+		else if(addToList === 'wish') {
+			arrayToUpdate = 'wishlistCountries'
+		}
 
 		console.log(country);
-		fetch(baseAPI + `countries`)
+
+		if(this.state.currentUser) {
+			fetch(baseAPI + `countries`, {
+				body: JSON.stringify(country),
+				method: 'POST',
+				headers: {
+					'Accept' : 'application/json, text/plain, */*',
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(createdCountry => {
+				return createdCountry.json()
+			})
+			.then(jsonCountry => {
+				this.updateArray(jsonCountry[0], arrayToUpdate)
+				//Any view changes here
+					//Popup the trip added to?
+			})
+			.catch( err => console.log(err))
+
+		}
+
 	}
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
@@ -108,9 +138,20 @@ class App extends Component {
 			// }
 		})
 	}
-	handleChangeListView(event, view) {
-		this.setState( {
-			listView: view
+	handleChangeListView(view) {
+		this.setState( (prevState) => {
+			if(prevState.listView === view) {
+				return {
+					listView: ''
+				}
+			}
+			else {
+				return {
+					listView: view
+				}
+			}
+
+			
 		})
 	}
 	handleListChange( country, removeIndex, removeArray) {
@@ -254,15 +295,15 @@ class App extends Component {
 							})}
 						</select>
 					</div>
-					<button onClick={this.toggleModal}>Open Modal</button>
+					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
 					<div className="list-button-container">
 						<button 
-							onClick={(event)=> {this.handleChangeListView(event,'trip')}}
+							onClick={()=> {this.handleChangeListView('trip')}}
 							className={this.state.listView === 'trip'?'button-selected':''}> 
 							Trip
 						</button>
 						<button 
-							onClick={(event)=> {this.handleChangeListView(event,'wish')}}className={this.state.listView === 'wish'?'button-selected':''}> 
+							onClick={()=> {this.handleChangeListView('wish')}}className={this.state.listView === 'wish'?'button-selected':''}> 
 							Wish</button>
 					</div>
 
@@ -281,6 +322,7 @@ class App extends Component {
 							modalIsOpen={this.state.modalIsOpen}
 							toggleModal={this.toggleModal}
 							currentCountry={this.state.currentCountry}
+							handleNewCountry={this.handleNewCountry}
 						/>
 						: ''
 					}	
@@ -293,6 +335,7 @@ class App extends Component {
 					listView={this.state.listView}
 					handleListChange={this.handleListChange}
 					handleListDelete={this.handleListDelete}
+					handleChangeListView={this.handleChangeListView}
 				/>
 
 				<h1>Country Clicked: {this.state.currentCountry.country_title} - {this.state.currentCountry.country_code}</h1>

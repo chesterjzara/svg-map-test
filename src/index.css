@@ -87,6 +87,12 @@ main {
 .app-content{
   height: 100%;
 }
+.user-select-container {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
 .country-list {
   position: fixed;
   top: 100px;
