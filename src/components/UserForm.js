@@ -7,10 +7,14 @@ class UserForm extends Component {
       this.state = {
         username: '',
     }
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   handleSubmit(event) {
     event.preventDefault()
-    this.props.handleCreateUser()
+    this.props.handleCreateUser(this.state)
+    this.props.fetchUsers()
+    this.props.mainPage()
   }
   handleChange(event) {
     this.setState({
@@ -21,7 +25,9 @@ class UserForm extends Component {
   render () {
     return (
       <div className="user-form">
-        <form>
+      <h1>Create a Username!</h1>
+      <p>Once you create a username, you can start tracking the countries you have been and the ones you want to go!</p>
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             placeholder="Username..."
