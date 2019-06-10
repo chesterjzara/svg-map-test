@@ -5,17 +5,17 @@ class CountryList extends Component {
 	render () {
 		return (
 			<div className="country-list">
-				
-						
 
-				{ this.props.listView === 'trip' ? 
-					<div>
-						<button onClick={()=> this.props.handleChangeListView('')}>
+
+
+				{ this.props.listView === 'trip' ?
+					<div className="trip-lists">
+						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>
 						{this.props.visitedCountries.map( (country, index) => {
 							return (
-								< CountryItem 
+								< CountryItem
 									key={index}
 									index={index}
 									currArray='visitedCountries'
@@ -29,8 +29,8 @@ class CountryList extends Component {
 					</div> : ''
 				}
 				{ this.props.listView === 'wish' ?
-					<div>
-						<button onClick={()=> this.props.handleChangeListView('')}>
+					<div className="trip-lists">
+						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>
 						{this.props.wishlistCountries.map( (country, index) => {
