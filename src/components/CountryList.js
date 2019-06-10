@@ -9,7 +9,7 @@ class CountryList extends Component {
 
 
 				{ this.props.listView === 'trip' ?
-					<div>
+					<div className="trip-lists">
 						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>
@@ -29,7 +29,7 @@ class CountryList extends Component {
 					</div> : ''
 				}
 				{ this.props.listView === 'wish' ?
-					<div>
+					<div className="trip-lists">
 						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>

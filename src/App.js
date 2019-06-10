@@ -413,14 +413,14 @@ class App extends Component {
             		: '' }
 				<header>
 					<h1>World Map App</h1>
-					{this.state.loggedInUser ?
+          {this.state.loggedInUser ?
 						<div>
 							<button onClick={this.handleLogOut}>Log Out</button>
 						</div>
 						:
 						<div className="user-select-container">
 						<h4>User</h4>
-						<select
+						<select className="select-css"
 							onChange={(event) => this.handleSelect(event, 'currentUser')}
 							className="user-select"
 							value={this.state.currentUser} >
@@ -435,6 +435,7 @@ class App extends Component {
 					}
 					
 					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
+					{(this.state.currentUser) ?
 					<div className="list-button-container">
 						<button
 							onClick={()=> {this.handleChangeListView('trip')}}
@@ -445,6 +446,7 @@ class App extends Component {
 							onClick={()=> {this.handleChangeListView('wish')}}className={this.state.listView === 'wish'?'button-selected':''}>
 							Wish</button>
 					</div>
+					: '' }
 
 				</header>
 				<div >

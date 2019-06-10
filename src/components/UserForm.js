@@ -69,7 +69,7 @@ class UserForm extends Component {
             value={this.state.password}
             id='password'
             />
-          <button type="submit">Create New User!</button>
+          <button className="button" type="submit">Create New User!</button>
           <h2>{this.props.userCreateMessage}</h2>
         </form>
         <form onSubmit={this.handleLoginSubmit}>
@@ -87,9 +87,8 @@ class UserForm extends Component {
             value={this.state.loginPassword}
             id='loginPassword'
             />
-          <button type="submit">Login Existing User</button>
+          <button className="button" type="submit">Login Existing User</button>
           <h2> {this.props.loginError} </h2>
-
         </form>
         <img src="https://www.whatsuplife.in/kolkata/blog/wp-content/uploads/2017/08/E9E66935-5465-4B64-BB64-27424044FFF3-1201-00000105B6269EBB.jpeg" alt="ocean" />
       </div>
