@@ -16,8 +16,8 @@ class Welcome extends Component {
             <br />
             <p>Guest users have full access to the map, and can see other user's maps, but you won't be able to save your information. Create a username and track your journey to get started!</p>
           </main>
-        <button onClick={this.props.createUser}>Create a Username</button>
-        <button onClick={this.props.closeWelcome}>Continue as Guest</button>
+        <button className="button" onClick={this.props.createUser}>Create a Username</button>
+        <button className="button" onClick={this.props.closeWelcome}>Continue as Guest</button>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Mountain_Range_Banner.jpg/2560px-Mountain_Range_Banner.jpg" alt="mountains" />
       </div>
     )
