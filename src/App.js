@@ -121,7 +121,7 @@ class App extends Component {
 		console.log('login', loginParams);
 		fetch(baseAPI + `auth`, {
 			method: 'POST',
-			credentials: 'include',
+			// credentials: 'include',
 			body: JSON.stringify(loginParams),
 			headers: {
 				'Accept': 'application/json, text/plain, */*',
