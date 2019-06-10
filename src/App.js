@@ -12,7 +12,9 @@ import world from './world-low.svg'
 import { SvgLoader, SvgProxy } from 'react-svgmt'
 import worldString from './world-low-test.js'
 
-const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+// const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+const baseAPI = 'http://localhost:3000/'
+
 
 const debugPrint = (...args) => {
 	if(true) {
@@ -36,6 +38,9 @@ class App extends Component {
 			listView: '',
 			welcomeOpen: true,
 			userForm: false,
+			loggedInUser: '',
+			loginError: '',
+			userCreateMessage: ''
 		}
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
@@ -55,7 +60,10 @@ class App extends Component {
 		this.handleNewCountry = this.handleNewCountry.bind(this)
 		this.handleCountryInList = this.handleCountryInList.bind(this)
 		this.handleCreateUser = this.handleCreateUser.bind(this)
-  	}
+		this.handleUserLogin = this.handleUserLogin.bind(this)
+		this.handleLoggedInUser = this.handleLoggedInUser.bind(this)
+		this.handleLogOut = this.handleLogOut.bind(this)
+	}
 
   	toggleModal() {
       this.setState({
@@ -63,25 +71,25 @@ class App extends Component {
       })
   	}
 
-		closeWelcome() {
-			this.setState({
-				welcomeOpen: !this.state.welcomeOpen
-			})
-		}
+	closeWelcome() {
+		this.setState({
+			welcomeOpen: !this.state.welcomeOpen
+		})
+	}
 
-		createUser() {
-			this.setState({
-				welcomeOpen: !this.state.welcomeOpen,
-				userForm: !this.state.userForm
-			})
-		}
+	createUser() {
+		this.setState({
+			welcomeOpen: !this.state.welcomeOpen,
+			userForm: !this.state.userForm
+		})
+	}
 
-		mainPage() {
-			this.setState({
-				welcomeOpen: false,
-				userForm: false
-			})
-		}
+	mainPage() {
+		this.setState({
+			welcomeOpen: false,
+			userForm: false
+		})
+	}
 
 	handleCreateUser(user) {
 		fetch(baseAPI + `users`, {
@@ -97,12 +105,85 @@ class App extends Component {
 				console.log(userJson);
 				this.fetchUsers()
 				this.setState({
-					currentUser: userJson.user_id
+					userCreateMessage: 'Success, user created!',
+					loginError: ''
 				})
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				console.log(err)
+				this.setState({
+					userCreateMessage: 'Failure - user not created!',
+					loginError: ''
+				})
+			})
 	}
+	handleUserLogin (loginParams) {
+		console.log('login', loginParams);
+		fetch(baseAPI + `auth`, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify(loginParams),
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(loginRes => loginRes.json())
+			.then(jsonLogin => {
+				console.log('Post user login fetch:',jsonLogin)
+				if(!jsonLogin.error) {
+					console.log('no error path')
+					localStorage.setItem('jwt', jsonLogin.jwt)
+					this.setState({
+						loggedInUser: jsonLogin.user_id,
+						userCreateMessage: '',
+						loginError: ''
+					})
+					this.fetchUserCountries(jsonLogin.user_id)
+					this.mainPage()
+				}
+				else {
+					console.log(jsonLogin.error)
+					this.setState({
+						loginError: jsonLogin.error,
+						userCreateMessage: ''
+					})
+				}
+			})
+	}
+	handleLoggedInUser() {
+		fetch(baseAPI + 'current_user', {
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'Authorization': localStorage.getItem('jwt')
+			}
+		})
+			.then(userRes => userRes.json())
+			.then(jsonUser => {
+				console.log('PRev user:',jsonUser)
+				this.setState({
+					loggedInUser: jsonUser.user_id,
+					currentUser: jsonUser.user_id,
+					welcomeOpen: false,
+				})
+				this.fetchUserCountries(jsonUser.user_id)
+			})
 
+	}
+	handleLogOut() {
+		localStorage.removeItem('jwt')
+		this.setState({
+			loggedInUser: '',
+			currentUser: '',
+			welcomeOpen: true,
+			visitedCountries: [],
+			wishlistCountries: [],
+			listView: '',
+			loginError: '',
+			userCreateMessage: ''
+		})
+	}
 	click(event) {
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
@@ -300,6 +381,10 @@ class App extends Component {
 
 	componentDidMount() {
 		this.fetchUsers()
+		if (localStorage.getItem('jwt') !== null) {
+			console.log('Found localStorage user on load...')
+			this.handleLoggedInUser()
+		}
 	}
   	render() {
 		return (
@@ -313,18 +398,26 @@ class App extends Component {
 					: '' }
           		{(this.state.userForm) ?
             		<UserForm
-									handleCreateUser={this.handleCreateUser}
-									mainPage={this.mainPage}
-									welcomeOpen={this.state.welcomeOpen}
-									userForm={this.state.userForm}
-									users={this.state.users}
-									currentUser={this.state.currentUser}
-									fetchUsers={this.fetchUsers}
-									/>
+						handleCreateUser={this.handleCreateUser}
+						handleUserLogin={this.handleUserLogin}
+						mainPage={this.mainPage}
+						welcomeOpen={this.state.welcomeOpen}
+						userForm={this.state.userForm}
+						users={this.state.users}
+						currentUser={this.state.currentUser}
+						fetchUsers={this.fetchUsers}
+						loginError={this.state.loginError}
+						userCreateMessage={this.state.userCreateMessage}
+						/>
             		: '' }
 				<header>
 					<h1>World Map App</h1>
-					<div className="user-select-container">
+					{this.state.loggedInUser ?
+						<div>
+							<button onClick={this.handleLogOut}>Log Out</button>
+						</div>
+						:
+						<div className="user-select-container">
 						<h4>User</h4>
 						<select
 							onChange={(event) => this.handleSelect(event, 'currentUser')}
@@ -338,6 +431,8 @@ class App extends Component {
 							})}
 						</select>
 					</div>
+					}
+					
 					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
 					<div className="list-button-container">
 						<button
