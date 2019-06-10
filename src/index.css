@@ -76,12 +76,37 @@ button:hover {
   font-weight: 600;
 }
 
+input {
+  height: 40px;
+  font-size: 15px;
+
+}
+
 .button-selected {
   background-color: lightblue;
 }
 
+.close-btn {
+  border: 0;
+  background-color: white;
+  color: #636c7a;
+  font-size: 15px;
+}
+
+.close-btn:hover {
+  color: black;
+}
+
 main {
   margin: 0 10% 0 10%;
+}
+
+.user-page {
+  margin-top: 50px;
+}
+
+form {
+  margin-bottom: 150px;
 }
 
 .app-content{
