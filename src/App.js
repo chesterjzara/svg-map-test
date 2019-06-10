@@ -12,8 +12,8 @@ import world from './world-low.svg'
 import { SvgLoader, SvgProxy } from 'react-svgmt'
 import worldString from './world-low-test.js'
 
-// const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
-const baseAPI = 'http://localhost:3000/'
+const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
+// const baseAPI = 'http://localhost:3000/'
 
 
 const debugPrint = (...args) => {
