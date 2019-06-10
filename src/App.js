@@ -152,6 +152,7 @@ class App extends Component {
 			})
 	}
 	handleLoggedInUser() {
+		console.log('handleLoggedInUser')
 		fetch(baseAPI + 'current_user', {
 			headers: {
 				'Accept': 'application/json, text/plain, */*',
@@ -161,7 +162,7 @@ class App extends Component {
 		})
 			.then(userRes => userRes.json())
 			.then(jsonUser => {
-				console.log('PRev user:',jsonUser)
+				console.log('Prev user:',jsonUser)
 				this.setState({
 					loggedInUser: jsonUser.user_id,
 					currentUser: jsonUser.user_id,
