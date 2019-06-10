@@ -412,39 +412,40 @@ class App extends Component {
 						/>
             		: '' }
 				<header>
+					{/* TODO - make this go to the Welcome Page */}
 					<h1>World Map App</h1>
-          {this.state.loggedInUser ?
+          			{this.state.loggedInUser ?
 						<div>
 							<button onClick={this.handleLogOut}>Log Out</button>
 						</div>
 						:
 						<div className="user-select-container">
-						<h4>User</h4>
-						<select className="select-css"
-							onChange={(event) => this.handleSelect(event, 'currentUser')}
-							className="user-select"
-							value={this.state.currentUser} >
-							<option key='0' value="">Select User</option>
-							{this.state.users.map( (user, index) => {
-								return (
-									<option key={user.user_id} value={user.user_id}> {user.username} </option>
-								)
-							})}
-						</select>
-					</div>
+							{/* TODO - add 'Register' button to go to UserForm page */}
+							<select className="select-css"
+								onChange={(event) => this.handleSelect(event, 'currentUser')}
+								className="user-select"
+								value={this.state.currentUser} >
+								<option key='0' value="">Select User</option>
+								{this.state.users.map( (user, index) => {
+									return (
+										<option key={user.user_id} value={user.user_id}> {user.username} </option>
+									)
+								})}
+							</select>
+						</div>
 					}
 					
 					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
 					{(this.state.currentUser) ?
 					<div className="list-button-container">
 						<button
-							onClick={()=> {this.handleChangeListView('trip')}}
-							className={this.state.listView === 'trip'?'button-selected':''}>
+							onClick={()=> {this.handleChangeListView('trip')}} >
 							Trip
 						</button>
 						<button
-							onClick={()=> {this.handleChangeListView('wish')}}className={this.state.listView === 'wish'?'button-selected':''}>
-							Wish</button>
+							onClick={()=> {this.handleChangeListView('wish')}} >
+							Wish
+						</button>
 					</div>
 					: '' }
 
