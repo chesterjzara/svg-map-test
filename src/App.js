@@ -42,6 +42,7 @@ class App extends Component {
 			loginError: '',
 			userCreateMessage: ''
 		}
+
 		this.click = this.click.bind(this)
 		this.toggleModal = this.toggleModal.bind(this)
 		this.fetchUsers = this.fetchUsers.bind(this)
@@ -63,13 +64,14 @@ class App extends Component {
 		this.handleUserLogin = this.handleUserLogin.bind(this)
 		this.handleLoggedInUser = this.handleLoggedInUser.bind(this)
 		this.handleLogOut = this.handleLogOut.bind(this)
+		this.openCreateUser = this.openCreateUser.bind(this)
 	}
 
-  	toggleModal() {
-      this.setState({
-        modalIsOpen: !this.state.modalIsOpen
-      })
-  	}
+  toggleModal() {
+    this.setState({
+      modalIsOpen: !this.state.modalIsOpen
+    })
+  }
 
 	closeWelcome() {
 		this.setState({
@@ -80,6 +82,12 @@ class App extends Component {
 	createUser() {
 		this.setState({
 			welcomeOpen: !this.state.welcomeOpen,
+			userForm: !this.state.userForm
+		})
+	}
+
+	openCreateUser() {
+		this.setState({
 			userForm: !this.state.userForm
 		})
 	}
@@ -117,6 +125,7 @@ class App extends Component {
 				})
 			})
 	}
+
 	handleUserLogin (loginParams) {
 		console.log('login', loginParams);
 		fetch(baseAPI + `auth`, {
@@ -151,6 +160,7 @@ class App extends Component {
 				}
 			})
 	}
+
 	handleLoggedInUser() {
 		console.log('handleLoggedInUser')
 		fetch(baseAPI + 'current_user', {
@@ -172,6 +182,7 @@ class App extends Component {
 			})
 
 	}
+
 	handleLogOut() {
 		localStorage.removeItem('jwt')
 		this.setState({
@@ -200,6 +211,7 @@ class App extends Component {
 	  		})
 		}
 	}
+
 	handleCountryInList(country, listToCheck) {
 		let countryCode = country.country_code
 		let inList = false;
@@ -212,6 +224,7 @@ class App extends Component {
 
 		return inList
 	}
+
 	handleNewCountry(country, addToList) {
 		country.user_id = this.state.currentUser
 		country.type = addToList
@@ -247,6 +260,7 @@ class App extends Component {
 		}
 
 	}
+
 	handleSelect(event, selectVariable) {
 		let selectedValue = event.target.value
 		debugPrint('Select Change:','var -',selectVariable,'val -',selectedValue,)
@@ -256,6 +270,7 @@ class App extends Component {
 			}
 		})
 	}
+
 	handleChangeListView(view) {
 		this.setState( (prevState) => {
 			if(prevState.listView === view) {
@@ -270,6 +285,7 @@ class App extends Component {
 			}
 		})
 	}
+
 	handleListChange( country, removeIndex, removeArray) {
 		if (removeArray === 'visitedCountries') {
 			country.type = 'wish'
@@ -301,6 +317,7 @@ class App extends Component {
 			}
 		})
 	}
+
 	handleListDelete(country, removeIndex, removeArray) {
 		fetch(baseAPI + `countries/${country.trip_id}`, {
 			method: 'DELETE'
@@ -314,6 +331,7 @@ class App extends Component {
 		.catch( err => console.log(err))
 
 	}
+
 	removeFromArray(array, arrayIndex) {
 		this.setState( (prevState) => {
 			prevState[array].splice(arrayIndex, 1)
@@ -322,6 +340,7 @@ class App extends Component {
 			}
 		})
 	}
+
 	updateArray( country, array) {
 		this.setState( (prevState) => {
 			prevState[array].push(country)
@@ -330,6 +349,7 @@ class App extends Component {
 			}
 		})
 	}
+
 	fetchUserCountries(userId) {
 		debugPrint('Fetch country data for:',userId)
 		fetch(baseAPI + `countries/user/${userId}`)
@@ -341,6 +361,7 @@ class App extends Component {
 
 			})
 	}
+
 	sortUserCountryData(userCountries, userId) {
 		let userTrips = []
 		let userWishlist = []
@@ -362,6 +383,7 @@ class App extends Component {
 
 		})
 	}
+
 	fetchUsers() {
 		fetch(baseAPI + 'users')
 			.then(data => data.json())
@@ -371,6 +393,7 @@ class App extends Component {
 			})
 			.catch(err => console.log(err))
 	}
+
 	setUsers(jsonRes) {
 		console.log('set users')
 		this.setState( (prevState) => {
@@ -387,6 +410,7 @@ class App extends Component {
 			this.handleLoggedInUser()
 		}
 	}
+
   	render() {
 		return (
 	  		<div className="app-content">
@@ -409,18 +433,20 @@ class App extends Component {
 						fetchUsers={this.fetchUsers}
 						loginError={this.state.loginError}
 						userCreateMessage={this.state.userCreateMessage}
+						closeWelcome={this.closeWelcome}
 						/>
             		: '' }
 				<header>
-					{/* TODO - make this go to the Welcome Page */}
-					<h1>World Map App</h1>
-          			{this.state.loggedInUser ?
-						<div>
-							<button onClick={this.handleLogOut}>Log Out</button>
-						</div>
-						:
+					<h1 onClick={this.closeWelcome}>World Map App</h1>
+          			{this.state.loggedInUser
+								?
+								<div>
+									<button onClick={this.handleLogOut}>Log Out</button>
+								</div>
+								:
 						<div className="user-select-container">
-							{/* TODO - add 'Register' button to go to UserForm page */}
+							{this.state.currentUser ? '' :
+						 	<button onClick={this.openCreateUser}>Register</button> }
 							<select className="select-css"
 								onChange={(event) => this.handleSelect(event, 'currentUser')}
 								className="user-select"
@@ -434,7 +460,7 @@ class App extends Component {
 							</select>
 						</div>
 					}
-					
+
 					{/* <button onClick={this.toggleModal}>Open Modal</button> */}
 					{(this.state.currentUser) ?
 					<div className="list-button-container">

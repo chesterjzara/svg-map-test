@@ -13,6 +13,7 @@ class CountryList extends Component {
 						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>
+						<h2>Countries Visited</h2>
 						{this.props.visitedCountries.map( (country, index) => {
 							return (
 								< CountryItem
@@ -33,6 +34,7 @@ class CountryList extends Component {
 						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
 							X
 						</button>
+						<h2>Countries on Wish List</h2>
 						{this.props.wishlistCountries.map( (country, index) => {
 							return (
 								< CountryItem
