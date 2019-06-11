@@ -433,6 +433,7 @@ class App extends Component {
 						fetchUsers={this.fetchUsers}
 						loginError={this.state.loginError}
 						userCreateMessage={this.state.userCreateMessage}
+						closeWelcome={this.closeWelcome}
 						/>
             		: '' }
 				<header>

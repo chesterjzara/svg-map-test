@@ -48,7 +48,7 @@ class UserForm extends Component {
     return (
       <div className="user-form">
       <header>
-        <h1>World Map App</h1>
+        <h1 onClick={this.props.closeWelcome}>World Map App</h1>
       </header>
       <main className="user-page">
       <h1>Create a Username!</h1>
