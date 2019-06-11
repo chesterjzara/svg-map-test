@@ -1,68 +1,37 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# World Map App
+Full CRUD Application built with React frontend and Rails API server.
 
-## Available Scripts
+Built by CJ Zara and Sara Wegmann
 
-In the project directory, you can run:
+Link to the project: https://shielded-taiga-28162.herokuapp.com/
 
-### `npm start`
+## Description
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+World Map App is an interactive application that allows a user to view the world by country and track where they have been or where they want to go. The application has authentication, but can also be used by guest users to view the map and countries. When a country is clicked on a user is displayed the country's flag. 
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+- React
+- Ruby on Rails
+- PostgreSQL
+- SVG
+- CSS 
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Approach Taken
 
-### `npm run build`
+Before starting to develop the architecture for the app, CJ explored SVGs and found one that would work for the project. Once we decided it would be a good fit for our project, we moved on to set up the React architecture. We walked through how we wanted the app the function and set up components for each part. We then determined state for the App, and the methods that we would need. Through the process we added to state, props, and methods to expand the functionality of the app. 
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+We kept track of our progress using a GitHub Projects board. 
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## User Stories
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- A user has the ability to view the app as a guest user. Can navigate through other user's saved maps and can view the countries.
+- A user has the ability to register for the app to begin saving their own trips.
+- Once registered and logged in, a user can add a country to their list of countries that they have visited before. 
+- A logged in user can add a country that they want to visit to their "wish list".
+- A logged in user can move a country from their wish list to their visited list.
+- A logged in user can delete a country from their wish list or their visited list.
 
-### `npm run eject`
+## Unsolved Problems
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+If we had more time to work on this app, we would incorporate a third party API to pull in facts and pictures of the countries. When the user clicked on a country, it would display pictures, the flag, and some interested facts. 
