@@ -4,7 +4,8 @@ import { SvgLoader, SvgProxy } from 'react-svgmt';
 class Map extends Component {
     render () {
         return (
-        <div className="map" onClick={this.props.click} onTouchStart={this.props.click}>
+            // onTouchStart={this.props.click}
+        <div className="map" onClick={this.props.click} > 
             <SvgLoader svgXML={this.props.worldString} >
                 <SvgProxy selector='*' fill="" stroke=""/>
                 {this.props.visitedCountries.map( (country) => {

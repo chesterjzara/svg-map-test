@@ -197,6 +197,7 @@ class App extends Component {
 		})
 	}
 	click(event) {
+		console.log('Clicked:',event.nativeEvent)
 		let countryTitle = event.target.getAttribute('title')
 		let countrySvgId = event.target.id
 		if (countryTitle) {
