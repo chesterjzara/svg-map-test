@@ -493,6 +493,7 @@ class App extends Component {
 							handleNewCountry={this.handleNewCountry}
 							currentUser={this.state.currentUser}
 							handleCountryInList={this.handleCountryInList}
+							loggedInUser={this.state.loggedInUser}
 						/>
 						: ''
 					}
