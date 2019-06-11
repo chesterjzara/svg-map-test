@@ -55,6 +55,7 @@ header {
 .user-form {
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
   position: fixed;
   background-color: white;
   z-index: 200;
@@ -152,6 +153,7 @@ form {
 .user-select-container {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
   align-items: center;
   font-family: 'Roboto', sans-serif;
   width: 300px;
@@ -169,7 +171,7 @@ select {
     max-width: 100%;
     box-sizing: border-box;
     margin: 0;
-    border: 1px solid ##636c7a;
+    border: 1px solid #636c7a;
     box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
     border-radius: .5em;
     -moz-appearance: none;
@@ -199,6 +201,13 @@ select option {
     font-weight:normal;
 }
 
+.list-button-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
 .country-list {
   position: fixed;
   top: 100px;
@@ -208,6 +217,11 @@ select option {
   background-color: rgba(255, 255, 255, 0.7);
   border-left: 1px solid black;
   border-bottom: 1px solid black;
+}
+
+.map {
+  display: flex;
+  justify-content: center;
 }
 
 svg {

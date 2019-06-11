@@ -75,7 +75,9 @@ class App extends Component {
 
 	closeWelcome() {
 		this.setState({
-			welcomeOpen: !this.state.welcomeOpen
+			welcomeOpen: !this.state.welcomeOpen,
+			listView: '',
+			modalIsOpen: false
 		})
 	}
 
