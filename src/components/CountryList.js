@@ -30,6 +30,7 @@ class CountryList extends Component {
 						})}
 					</div> : ''
 				}
+
 				{ this.props.listView === 'wish' ?
 					<div className="trip-lists">
 						<button className="close-btn" onClick={()=> this.props.handleChangeListView('')}>
@@ -45,6 +46,7 @@ class CountryList extends Component {
 									handleListChange={this.props.handleListChange}
 									handleListDelete={this.props.handleListDelete}
 									country={country}
+									loggedInUser={this.props.loggedInUser}
 								/>
 							)
 						})}
