@@ -58,10 +58,7 @@
 					inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput
 				})
 
-				console.log('in init')
-
 				this.hammer.on('doubletap', function(ev) {
-					console.log('hit zoom in custom event')
 					instance.zoomIn()
 				})
 
@@ -69,8 +66,6 @@
 
 				this.hammer.on('pinchstart pinchmove', function(ev){
               		// On pinch start remember initial zoom
-					console.log('in hammer pinch code')
-					console.log(ev.scale)
 					if (ev.type === 'pinchstart') {
 						initialScale = instance.getZoom()
 						instance.zoomAtPoint(initialScale * ev.scale, {x: ev.center.x, y: ev.center.y})
