@@ -10,7 +10,8 @@ class Country extends Component {
             <img src={`https://www.countryflags.io/${this.props.currentCountry.country_code}/shiny/64.png`} />
             <br />
           <button onClick={this.props.toggleModal}>Close Modal</button>
-
+          {this.props.loggedInUser ?
+          <div>
           {this.props.currentUser ?
             <div className="modal-details">
               {this.props.handleCountryInList(this.props.currentCountry, 'visitedCountries') || this.props.handleCountryInList(this.props.currentCountry, 'wishlistCountries') ?
@@ -27,7 +28,8 @@ class Country extends Component {
                   </button>
                 </div>
               }
-
+              </div>
+              : '' }
 
             </div>
             : ''

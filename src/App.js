@@ -506,6 +506,7 @@ class App extends Component {
 					handleListChange={this.handleListChange}
 					handleListDelete={this.handleListDelete}
 					handleChangeListView={this.handleChangeListView}
+					loggedInUser={this.state.loggedInUser}
 				/>
 		</div>
 		)
