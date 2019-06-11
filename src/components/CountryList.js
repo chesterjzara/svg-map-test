@@ -24,6 +24,7 @@ class CountryList extends Component {
 									handleListDelete={this.props.handleListDelete}
 									// Method for delete
 									country={country}
+									loggedInUser={this.props.loggedInUser}
 								/>
 							)
 						})}
