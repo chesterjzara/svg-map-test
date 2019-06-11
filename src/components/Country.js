@@ -11,12 +11,11 @@ class Country extends Component {
             <br />
           <button onClick={this.props.toggleModal}>Close Modal</button>
           {this.props.loggedInUser ?
-          <div>
-          {this.props.currentUser ?
+
             <div className="modal-details">
               {this.props.handleCountryInList(this.props.currentCountry, 'visitedCountries') || this.props.handleCountryInList(this.props.currentCountry, 'wishlistCountries') ?
                 <h2>Country already on list!</h2>
-              :
+                :
                 <div className="add-buttons">
                   <button
                     onClick={()=> this.props.handleNewCountry(this.props.currentCountry, 'trip')}>
@@ -27,13 +26,9 @@ class Country extends Component {
                     Add to Wishlist
                   </button>
                 </div>
-              }
+                }
               </div>
               : '' }
-
-            </div>
-            : ''
-          }
 
         </div>
         </React.Fragment>
