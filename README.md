@@ -17,6 +17,7 @@ World Map App is an interactive application that allows a user to view the world
   - React
   - [Hammer.js](https://hammerjs.github.io/)
   - [svg-pan-zoom](https://github.com/ariutta/svg-pan-zoom) - including example code for Hammer.js integration
+  - [react-svgmt](https://hugozap.github.io/react-svgmt/) - library for altering SVG properties in React lifecycle
 - Ruby on Rails
   - [bcrypt](https://rubygems.org/gems/bcrypt/versions/3.1.12) and [jwt](https://rubygems.org/gems/jwt) gems for auth
 - PostgreSQL
