@@ -219,6 +219,12 @@ select option {
   border-bottom: 1px solid black;
 }
 
+.trip-lists {
+  padding: 10px;
+  height: 500px;
+  overflow-y: scroll;
+}
+
 .map {
   display: flex;
   justify-content: center;
