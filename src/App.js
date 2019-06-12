@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal'
+// import Modal from 'react-modal'
 import UserForm from './components/UserForm'
 import CountryList from './components/CountryList'
 import Country from './components/Country'
@@ -7,14 +7,13 @@ import Map from './components/Map'
 import Welcome from './components/Welcome'
 
 //Old SVG import method
-import world from './world-low.svg'
+// import world from './world-low.svg'
 // New SVG Import method
-import { SvgLoader, SvgProxy } from 'react-svgmt'
+// import { SvgLoader, SvgProxy } from 'react-svgmt'
 import worldString from './world-low-test.js'
 
 const baseAPI = 'https://afternoon-anchorage-81144.herokuapp.com/'
 // const baseAPI = 'http://localhost:3000/'
-
 
 const debugPrint = (...args) => {
 	if(true) {
@@ -112,7 +111,7 @@ class App extends Component {
 		})
 			.then(createdUser => createdUser.json())
 			.then(userJson => {
-				console.log(userJson);
+				// console.log(userJson);
 				this.fetchUsers()
 				this.setState({
 					userCreateMessage: 'Success, user created!',
@@ -120,7 +119,7 @@ class App extends Component {
 				})
 			})
 			.catch(err => {
-				console.log(err)
+				// console.log(err)
 				this.setState({
 					userCreateMessage: 'Failure - user not created!',
 					loginError: ''
@@ -129,7 +128,7 @@ class App extends Component {
 	}
 
 	handleUserLogin (loginParams) {
-		console.log('login', loginParams);
+		// console.log('login', loginParams);
 		fetch(baseAPI + `auth`, {
 			method: 'POST',
 			// credentials: 'include',
@@ -141,9 +140,9 @@ class App extends Component {
 		})
 			.then(loginRes => loginRes.json())
 			.then(jsonLogin => {
-				console.log('Post user login fetch:',jsonLogin)
+				// console.log('Post user login fetch:',jsonLogin)
 				if(!jsonLogin.error) {
-					console.log('no error path')
+					// console.log('no error path')
 					localStorage.setItem('jwt', jsonLogin.jwt)
 					this.setState({
 						loggedInUser: jsonLogin.user_id,
@@ -154,7 +153,7 @@ class App extends Component {
 					this.mainPage()
 				}
 				else {
-					console.log(jsonLogin.error)
+					// console.log(jsonLogin.error)
 					this.setState({
 						loginError: jsonLogin.error,
 						userCreateMessage: ''
@@ -164,7 +163,7 @@ class App extends Component {
 	}
 
 	handleLoggedInUser() {
-		console.log('handleLoggedInUser')
+		// console.log('handleLoggedInUser')
 		fetch(baseAPI + 'current_user', {
 			headers: {
 				'Accept': 'application/json, text/plain, */*',
@@ -174,7 +173,7 @@ class App extends Component {
 		})
 			.then(userRes => userRes.json())
 			.then(jsonUser => {
-				console.log('Prev user:',jsonUser)
+				// console.log('Prev user:',jsonUser)
 				this.setState({
 					loggedInUser: jsonUser.user_id,
 					currentUser: jsonUser.user_id,
@@ -359,7 +358,7 @@ class App extends Component {
 			.then(jsonRes => {
 				debugPrint(jsonRes)
 				this.sortUserCountryData(jsonRes, userId)
-				console.log('state after?',this.state.visitedCountries)
+				// console.log('state after?',this.state.visitedCountries)
 
 			})
 	}
@@ -397,7 +396,7 @@ class App extends Component {
 	}
 
 	setUsers(jsonRes) {
-		console.log('set users')
+		// console.log('set users')
 		this.setState( (prevState) => {
 			return {
 				users : jsonRes
@@ -408,7 +407,7 @@ class App extends Component {
 	componentDidMount() {
 		this.fetchUsers()
 		if (localStorage.getItem('jwt') !== null) {
-			console.log('Found localStorage user on load...')
+			// console.log('Found localStorage user on load...')
 			this.handleLoggedInUser()
 		}
 	}
